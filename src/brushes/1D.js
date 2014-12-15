@@ -63,6 +63,31 @@
     return extents;
   }
 
+  function brushState(state) {
+    if (arguments.length === 0) {
+      state = {};
+      __.dimensions.forEach(function(d) {
+        var brush = brushes[d];
+        if (!brush.empty()) {
+          var extent = brush.extent();
+          extent.sort(d3.ascending);
+          state[d] = extent;
+        }
+      });
+      return state;
+    } else {
+      Object.getOwnPropertyNames(state).forEach(function(axis) {
+        var brush = brushes[axis],
+            idx = pc.dimensions().indexOf(axis),
+            gBrush = d3.select(g.selectAll(".brush")[idx][0]).transition();
+
+        brush.extent(state[axis]);
+        brush(gBrush.transition().duration(500));
+      });
+      return this;
+    }
+  }
+
   function brushFor(axis) {
     var brush = d3.svg.brush();
 
@@ -110,6 +135,7 @@
 
     pc.brushExtents = brushExtents;
     pc.brushReset = brushReset;
+    pc.brushState = brushState;
     return pc;
   }
 
@@ -120,6 +146,7 @@
       brushes = {};
       delete pc.brushExtents;
       delete pc.brushReset;
+      delete pc.brushState;
     },
     selected: selected
   }

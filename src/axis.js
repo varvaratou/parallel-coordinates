@@ -1,5 +1,6 @@
 function flipAxisAndUpdatePCP(dimension) {
-  var g = pc.svg.selectAll(".dimension");
+  var g = pc.svg.selectAll(".dimension"),
+      state = pc.brushState();
 
   pc.flip(dimension);
 
@@ -8,6 +9,7 @@ function flipAxisAndUpdatePCP(dimension) {
       .duration(1100)
       .call(axis.scale(yscale[dimension]));
 
+  pc.brushState(state);
   pc.render();
   if (flags.shadows) paths(__.data, ctx.shadows);
 }

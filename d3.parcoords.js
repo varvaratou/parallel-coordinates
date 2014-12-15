@@ -503,7 +503,8 @@ pc.clear = function(layer) {
   return this;
 };
 function flipAxisAndUpdatePCP(dimension) {
-  var g = pc.svg.selectAll(".dimension");
+  var g = pc.svg.selectAll(".dimension"),
+      state = pc.brushState();
 
   pc.flip(dimension);
 
@@ -512,6 +513,7 @@ function flipAxisAndUpdatePCP(dimension) {
       .duration(1100)
       .call(axis.scale(yscale[dimension]));
 
+  pc.brushState(state);
   pc.render();
   if (flags.shadows) paths(__.data, ctx.shadows);
 }
@@ -835,6 +837,31 @@ pc.brushMode = function(mode) {
     return extents;
   }
 
+  function brushState(state) {
+    if (arguments.length === 0) {
+      state = {};
+      __.dimensions.forEach(function(d) {
+        var brush = brushes[d];
+        if (!brush.empty()) {
+          var extent = brush.extent();
+          extent.sort(d3.ascending);
+          state[d] = extent;
+        }
+      });
+      return state;
+    } else {
+      Object.getOwnPropertyNames(state).forEach(function(axis) {
+        var brush = brushes[axis],
+            idx = pc.dimensions().indexOf(axis),
+            gBrush = d3.select(g.selectAll(".brush")[idx][0]).transition();
+
+        brush.extent(state[axis]);
+        brush(gBrush.transition().duration(500));
+      });
+      return this;
+    }
+  }
+
   function brushFor(axis) {
     var brush = d3.svg.brush();
 
@@ -882,6 +909,7 @@ pc.brushMode = function(mode) {
 
     pc.brushExtents = brushExtents;
     pc.brushReset = brushReset;
+    pc.brushState = brushState;
     return pc;
   }
 
@@ -892,6 +920,7 @@ pc.brushMode = function(mode) {
       brushes = {};
       delete pc.brushExtents;
       delete pc.brushReset;
+      delete pc.brushState;
     },
     selected: selected
   }
