@@ -1129,13 +1129,15 @@ pc.brushMode = function(mode) {
     };
   }
 
+  function ids(strums) {
+    return Object.getOwnPropertyNames(strums).filter(function(d) {
+      return !isNaN(d);
+    });
+  }
+
   function brushReset(strums) {
     return function() {
-      var ids = Object.getOwnPropertyNames(strums).filter(function(d) {
-        return !isNaN(d);
-      });
-
-      ids.forEach(function(d) {
+      ids(strums).forEach(function(d) {
         strums.active = d;
         removeStrum(strums);
       });
