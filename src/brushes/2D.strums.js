@@ -27,7 +27,7 @@
       .attr("stroke-width", 2);
 
     drag
-      .on("drag", function(d, i) { 
+      .on("drag", function(d, i) {
         var ev = d3.event;
         i = i + 1;
         strum["p" + i][0] = Math.min(Math.max(strum.minX + 1, ev.x), strum.maxX);
@@ -226,6 +226,20 @@
     };
   }
 
+  function brushState(state) {
+    var state;
+    if (arguments.length === 0) {
+      state = {};
+      ids(strums).forEach(function(id) {
+        state[id] = strums[id];
+      });
+      console.log(state);
+      return state;
+    } else {
+
+    }
+  }
+
   function install() {
     var drag = d3.behavior.drag();
 
@@ -282,6 +296,7 @@
 
     // Install the required brushReset function
     pc.brushReset = brushReset(strums);
+    pc.brushState = brushState;
 
     drag
       .on("dragstart", onDragStart(strums))
@@ -308,6 +323,7 @@
       pc.selection.select("svg").select("rect#strum-events").remove();
       pc.on("axesreorder.strums", undefined);
       delete pc.brushReset;
+      delete pc.brushState;
 
       strumRect = undefined;
     },
