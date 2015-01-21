@@ -51,16 +51,8 @@
   };
 
   function brushExtents() {
-    var extents = {};
-    __.dimensions.forEach(function(d) {
-      var brush = brushes[d];
-      if (!brush.empty()) {
-        var extent = brush.extent();
-        extent.sort(d3.ascending);
-        extents[d] = extent;
-      }
-    });
-    return extents;
+    console.warn("pc.brushExtents is deprecated, use pc.brushState in stead");
+    return brushState();
   }
 
   function brushState(state) {
