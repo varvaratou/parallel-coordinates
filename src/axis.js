@@ -2,6 +2,10 @@ d3.rebind(pc, axis, "ticks", "orient", "tickValues", "tickSubdivide", "tickSize"
 
 function flipAxisAndUpdatePCP(dimension) {
   var g = pc.svg.selectAll(".dimension");
+  
+  if (pc.brushMode() === "1D-axes" || pc.brushMode() === "1D-axes-multi") {
+    var state = pc.brushExtents();
+  }
 
   pc.flip(dimension);
 
@@ -9,6 +13,10 @@ function flipAxisAndUpdatePCP(dimension) {
     .transition()
       .duration(__.animationTime)
       .call(axis.scale(__.dimensions[dimension].yscale));
+  
+  if (pc.brushMode() === "1D-axes" || pc.brushMode() === "1D-axes-multi") {
+    pc.brushExtents(state);
+  }
 
   pc.render();
 }
