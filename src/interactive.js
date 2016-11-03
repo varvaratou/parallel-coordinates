@@ -49,13 +49,19 @@ pc.resize = function() {
 };
 
 // highlight an array of data
-pc.highlight = function(data) {
+pc.highlight = function(data, keepHighlights) {
   if (arguments.length === 0) {
     return __.highlighted;
   }
 
-  __.highlighted = data;
-  pc.clear("highlight");
+  if (keepHighlights == true) {
+    __.highlighted = __.highlighted.concat(data);
+  } 
+  else {
+    __.highlighted = data;
+    pc.clear("highlight");
+  }
+
   d3.selectAll([canvas.foreground, canvas.brushed]).classed("faded", true);
   data.forEach(path_highlight);
   events.highlight.call(this, data);
