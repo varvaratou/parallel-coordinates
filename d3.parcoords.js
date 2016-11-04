@@ -666,7 +666,7 @@ function path_brushed(d, i) {
 };
 
 function path_foreground(d, i) {
-	ctx.foreground.strokeStyle = d3.functor(__.color)(d, i);
+  ctx.foreground.strokeStyle = d3.functor(__.color)(d, i);
 	return color_path(d, ctx.foreground);
 };
 
@@ -2349,19 +2349,13 @@ pc.resize = function() {
 };
 
 // highlight an array of data
-pc.highlight = function(data, keepHighlights) {
+pc.highlight = function(data) {
   if (arguments.length === 0) {
     return __.highlighted;
   }
 
-  if (keepHighlights == true) {
-    __.highlighted = __.highlighted.concat(data);
-  } 
-  else {
-    __.highlighted = data;
-    pc.clear("highlight");
-  }
-
+  __.highlighted = data;
+  pc.clear("highlight");
   d3.selectAll([canvas.foreground, canvas.brushed]).classed("faded", true);
   data.forEach(path_highlight);
   events.highlight.call(this, data);
