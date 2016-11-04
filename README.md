@@ -342,6 +342,7 @@ Pass an array of data to overlay the data on the chart, masking the foreground.
 
 Clear the highlighting layer. This is equivalent to calling <a href="#parcoords_clear">parcoords.clear("highlight")</a>.
 
+<a name="parcoords_highlightColor" href="#parcoords_highlightColor">#</a> parcoords.<b>highlightColor</b>(*color*)
 
 Change coloring of the highlighted polylines. If *color* is a string, highlighted polylines will be rendered as that color. If *color* is a function, that function will be run for each data element and the polyline color will be the return value.
 If no *color* is specified, the highlighted polylines get the original coloring for foreground items.
